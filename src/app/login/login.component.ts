@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DataService } from '../services/data.service';
 
@@ -18,6 +19,11 @@ export class LoginComponent implements OnInit {
   // ? property binding
   placeholderText = "enter account number"
 
+  loginForm = this.fb.group({
+    acno:['',[Validators.required,Validators.pattern('[0-9]*')]],
+    pswd:['',[Validators.required,Validators.pattern('[a-zA-Z0-9]*')]]
+  })
+
   // data
   // db:any = {
   //   1000: { "acno": 1000, "username": "Neer", "password": 1000, "balance": 5000 },
@@ -27,9 +33,10 @@ export class LoginComponent implements OnInit {
 
   
   // ? dependency injection access specifier public or private  property-name:Router(pre-defined)
-  constructor(private router:Router, private ds:DataService) { }
+  constructor(private router:Router, private ds:DataService, private fb:FormBuilder) { }
 
   ngOnInit(): void {
+    
   }
 
   // user defined functions
@@ -99,17 +106,21 @@ export class LoginComponent implements OnInit {
   // ? two way binding ngmodel
 
   login() {
-    let acno = this.acno;
-    let pswd = this.pswd;
+    let acno = this.loginForm.value.acno;
+    let pswd = this.loginForm.value.pswd;
 
     // let db = this.db
-    const result = this.ds.login(acno, pswd)
+    if(this.loginForm.valid) {
+      const result = this.ds.login(acno, pswd)
 
-    if (result) {
-        alert("login successdul")
-        this.router.navigateByUrl('dashboard')
+      if (result) {
+          alert("login successdul")
+          this.router.navigateByUrl('dashboard')
+      }
+    } else {
+      alert('invalid form')
     }
   }
 
-  
+
 }
