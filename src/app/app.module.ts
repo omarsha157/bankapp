@@ -12,6 +12,7 @@ import { AnimationDemoComponent } from './animation-demo/animation-demo.componen
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DeleteConfirmComponent } from './delete-confirm/delete-confirm.component';
 import { HighlightDirective } from './directives/highlight.directive'
+import { HttpClientModule } from '@angular/common/http'
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { HighlightDirective } from './directives/highlight.directive'
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

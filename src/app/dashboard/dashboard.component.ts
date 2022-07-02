@@ -35,18 +35,17 @@ export class DashboardComponent implements OnInit {
   acno = ""
 
   constructor(private ds:DataService,private fb:FormBuilder,private router:Router) {
-    this.user = this.ds.currentUser
+    this.user = localStorage.getItem('currentUser')
     this.lDate = new Date()
   }
 
   ngOnInit(): void {
-    if(!localStorage.getItem("currentAcno")){
-      alert("please login")
-      this.router.navigateByUrl('')
-    }
+    // if(!localStorage.getItem("currentAcno")){
+    //   alert("please login")
+    //   this.router.navigateByUrl('')
+    // }
   }
 
-  
 
   deposit() {
     var acno = this.depositForm.value.acno
@@ -54,11 +53,16 @@ export class DashboardComponent implements OnInit {
     var amount = this.depositForm.value.amount
 
     if(this.depositForm.valid){
-      const result = this.ds.deposit(acno, pswd, amount)
+      this.ds.deposit(acno, pswd, amount)
+        .subscribe((result:any) => {
+          if(result) {
+            alert(result.message)
+          }
+        },
+        result => {
+          alert(result.error.message)
+        })
 
-      if(result) {
-        alert(amount + " deposited successfully and new balance is " + result )
-      }
     } else {
       alert('invalid form')
     }
@@ -70,11 +74,16 @@ export class DashboardComponent implements OnInit {
     var amount = this.withdrawForm.value.amount
 
     if(this.withdrawForm.valid) {
-      const result = this.ds.withdraw(acno, pswd, amount)
+      this.ds.withdraw(acno, pswd, amount)
+      .subscribe((result:any) => {
+        if(result) {
+          alert(result.message)
+        }
+      },
+      result => {
+        alert(result.error.message)
+      })
 
-      if(result) {
-        alert(amount + " debited successfully and new balance is " + result )
-      }
     } else {
       alert('invalid form')
     }
